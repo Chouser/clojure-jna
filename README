@@ -1,0 +1,86 @@
+Dynamically load and use native C libs from Clojure using JNA
+
+Requires JNA:  https://jna.dev.java.net/
+
+To fetch this lib:
+	git clone git://github.com/Chouser/clojure-jna.git
+	cd clojure-jna
+
+In order to use JNA on Ubuntu, I did:
+	aptitude install libjna-java
+
+Then I have to start Clojure with a parameter to tell Java where to find the
+JNA native libs, the JNA .jar, and of course Clojure and this lib.  Again on
+Ubuntu that looks something like this:
+	java -Djava.library.path=/usr/lib/jni -Djava.ext.dirs=/usr/share/java -cp clojure-1.0.0.jar:src clojure.main
+
+Then use it:
+Clojure 1.0.0-
+user=> (use 'net.n01se.clojure-jna)
+nil
+user=> (jna-invoke Integer c/printf "My number: %d\n" 5)
+My number: 5
+13
+
+The first argument to jna-invoke is the native function's return value.  The
+second is a symbol, in this case c/printf.  The "c" part is the name of the
+library, in this case "libc".  The "printf" part is of course the name of the
+function to call.  The rest are arguments to the native function.
+
+That 13 is printf's return value -- I guess it's the number of bytes printed or
+something?  Anyway, feel free to ignore it just like all C programs do.
+
+
+If you're going to be calling the same function a few times, you might find it
+convenient to be able to call it like a regular Clojure function.  Use jna-fn
+for that:
+
+user=> (doc jna-fn)
+-------------------------
+net.n01se.clojure-jna/jna-fn
+([return-type function-symbol])
+Macro
+  Return a Clojure function that wraps a native library function:
+   (def c-printf (jna-fn Integer c/printf))
+   (c-printf "My number: %d\n" 5)
+nil
+
+user=> (def c-printf (jna-fn Integer c/printf))
+#'user/c-printf
+
+user=> (c-printf "My number: %d\n" 5)
+My number: 5
+13
+
+user=> (c-printf "My number: %d\n" 10)
+My number: 10
+14
+
+
+If you're going to be calling a bunch of functions from the same native lib, you
+might like to use jna-ns to create a Clojure namespace full of Clojure functions
+that wrap the native functions:
+
+user=> (doc jna-ns)
+-------------------------
+net.n01se.clojure-jna/jna-ns
+([new-ns libname fnspecs])
+Macro
+  Create a namespace full of Clojure functions that wrap functions from
+  a native library:
+  (jna-ns native-c c [Integer printf, Integer open, Integer close])
+  (native-c/printf "one %s two\n" "hello")
+nil
+
+user=> (jna-ns native-c c [Integer printf, Integer open, Integer close])
+#<Namespace native-c>
+
+user=> (native-c/printf "one %s two\n" "hello")
+one hello two
+14
+
+user=> (native-c/open "README")
+-1
+
+Enjoy!
+--Chouser
