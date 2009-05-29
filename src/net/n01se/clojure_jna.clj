@@ -9,7 +9,8 @@
 (ns
   #^{:author "Chris Houser"
      :doc "Dynamically load and use native C libs from Clojure using JNA"}
-  net.n01se.clojure-jna)
+  net.n01se.clojure-jna
+  (:import (com.sun.jna Native)))
 
 (defn- get-function [s]
   `(com.sun.jna.Function/getFunction ~(namespace s) ~(name s)))
@@ -41,3 +42,27 @@
          `(intern '~new-ns '~fn-name
                   (jna-fn ~return-type ~(symbol (str libname) (str fn-name)))))
      (the-ns '~new-ns)))
+
+(defn make-cbuf
+  "Create a direct ByteBuffer of the given size with little-endian
+   byte order.  This is useful for creating structs to pass to
+   native functions.  See also 'pointer'"
+  [size]
+  (-> (java.nio.ByteBuffer/allocateDirect size)
+      (.order java.nio.ByteOrder/LITTLE_ENDIAN)))
+
+(defn pointer
+  "Pass in a ByteBuffer (such as created by make-cbuf) and this will
+   return a JNA Pointer that can be passed directly to JNA-wrapped
+   native functions."
+  [direct-buffer]
+  (when direct-buffer
+    (Native/getDirectBufferPointer direct-buffer)))
+
+(defn when-err
+  "If value is negative one (-1), throws an excpetion with the given
+   msg and the current errno.  Otherwise returns value."
+  [value msg]
+  (if (== -1 value)
+    (throw (Exception. (str msg ", errno: " (Native/getLastError))))
+    value))
