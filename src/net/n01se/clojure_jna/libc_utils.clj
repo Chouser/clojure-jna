@@ -13,9 +13,15 @@
   net.n01se.clojure-jna.libc-utils
   (:use [net.n01se.clojure-jna :only [jna-ns make-cbuf pointer when-err]]))
 
-(jna-ns c c [Integer select])
+(jna-ns libc c [Integer select])
 
-(defn select [readfds & [writefds exceptfds timeout-secs]]
+(defn select
+  "Block for timeout-secs waiting for events on the given file
+   descriptors.  Each of readfds, writefds, and exceptfds must be
+   a collection of zero or more file descriptors (that is, integers),
+   or nil.  Returns a vector of three sets indicating the file
+   descriptors that have waiting events."
+  [readfds & [writefds exceptfds timeout-secs]]
   (let [FD_SETSIZE 1024
         bytes-per-int 4
         bits-per-byte 8
@@ -50,8 +56,8 @@
                   (pointer
                     (-> (make-cbuf 16)
                         (.putLong (long timeout-secs))
-                        (.putLong (long (* timeout-secs 1000000))))))]
-    (when-err (c/select
+                        (.putLong (long (* (rem timeout-secs 1) 1000000))))))]
+    (when-err (libc/select
                 (inc (apply max (concat readfds writefds exceptfds)))
                 (pointer readfds-buf)
                 (pointer writefds-buf)
