@@ -1,16 +1,14 @@
-; Copyright (c) Chris Houser, May 2009. All rights reserved.
-; The use and distribution terms for this software are covered by the
-; Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
-; which can be found in the file epl-v10.html at the root of this distribution.
-; By using this software in any fashion, you are agreeing to be bound by
-; the terms of this license.
-; You must not remove this notice, or any other, from this software.
+;; Copyright (c) Chris Houser, May 2009. All rights reserved.
+;; The use and distribution terms for this software are covered by the
+;; Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;; which can be found in the file epl-v10.html at the root of this distribution.
+;; By using this software in any fashion, you are agreeing to be bound by
+;; the terms of this license.
+;; You must not remove this notice, or any other, from this software.
 
-(ns
-  #^{:author "Chris Houser"
-     :doc "Dumping-ground for libc's 'select' function, until I find
-           a better place to put it, or other things to put here"}
-  net.n01se.clojure-jna.libc-utils
+(ns net.n01se.clojure-jna.libc-utils
+ "Convenience wrappers for libc functions. Currently just 'select'"
+  {:author "Chris Houser"}
   (:use [net.n01se.clojure-jna :only [jna-ns make-cbuf pointer when-err]]))
 
 (jna-ns libc c [Integer select])
