@@ -1,6 +1,7 @@
 **Dynamically load and use native C libs from Clojure using JNA**
 
-clojure-jna is available from clojars. Just add this to your Leiningen `project.clj` in the `:deps` section:
+clojure-jna is available from clojars. Just add this to your Leiningen
+`project.clj` in the `:dependencies` section:
 
 ```clojure
 [n01se.net/clojure-jna "1.0.0"]
