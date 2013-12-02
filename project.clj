@@ -1,4 +1,4 @@
-(defproject net.n01se/clojure-jna "1.0.0"
+(defproject net.n01se/clojure-jna "1.1.0-SNAPSHOT"
   :description "Access native libraries from Clojure"
   :url "http://github.com/Chouser/clojure-jna/"
   :scm {:name "git"
