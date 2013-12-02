@@ -14,32 +14,32 @@
 (defn- get-function [s]
   `(com.sun.jna.Function/getFunction ~(namespace s) ~(name s)))
 
-(defmacro jna-invoke
+(defmacro invoke
   "Call a native library function:
-  (jna-invoke Integer c/printf \"My number: %d\\n\" 5)"
+  (jna/invoke Integer c/printf \"My number: %d\\n\" 5)"
   [return-type function-symbol & args]
   `(.invoke ~(get-function function-symbol) ~return-type (to-array [~@args])))
 
-(defmacro jna-fn
+(defmacro to-fn
   "Return a Clojure function that wraps a native library function:
-   (def c-printf (jna-fn Integer c/printf))
+   (def c-printf (jna/to-fn Integer c/printf))
    (c-printf \"My number: %d\\n\" 5)"
   [return-type function-symbol]
   `(let [func# ~(get-function function-symbol)]
      (fn [& args#]
        (.invoke func# ~return-type (to-array args#)))))
 
-(defmacro jna-ns
+(defmacro to-ns
   "Create a namespace full of Clojure functions that wrap functions from
   a native library:
-  (jna-ns native-c c [Integer printf, Integer open, Integer close])
+  (jna/to-ns native-c c [Integer printf, Integer open, Integer close])
   (native-c/printf \"one %s two\\n\" \"hello\")"
   [new-ns libname fnspecs]
   `(do
      (create-ns '~new-ns)
      ~@(for [[return-type fn-name] (partition 2 fnspecs)]
          `(intern '~new-ns '~fn-name
-                  (jna-fn ~return-type ~(symbol (str libname) (str fn-name)))))
+                  (to-fn ~return-type ~(symbol (str libname) (str fn-name)))))
      (the-ns '~new-ns)))
 
 (defn make-cbuf

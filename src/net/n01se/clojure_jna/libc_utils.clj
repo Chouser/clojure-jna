@@ -9,9 +9,9 @@
 (ns net.n01se.clojure-jna.libc-utils
  "Convenience wrappers for libc functions. Currently just 'select'"
   {:author "Chris Houser"}
-  (:use [net.n01se.clojure-jna :only [jna-ns make-cbuf pointer when-err]]))
+  (:require [net.n01se.clojure-jna :as jna :refer [make-cbuf pointer]]))
 
-(jna-ns libc c [Integer select])
+(jna/to-ns libc c [Integer select])
 
 (defn select
   "Block for timeout-secs waiting for events on the given file

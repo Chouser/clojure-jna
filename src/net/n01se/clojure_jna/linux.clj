@@ -9,10 +9,10 @@
 (ns net.n01se.clojure-jna.linux
   "Convenient clojure functions providing linux-specific features via JNA"
   {:author "Chris Houser"}
-  (:use [net.n01se.clojure-jna :only [jna-ns make-cbuf pointer when-err]]
-        [net.n01se.clojure-jna.libc-utils :only [select]]))
+  (:require [net.n01se.clojure-jna :refer [to-ns make-cbuf pointer when-err]]
+            [net.n01se.clojure-jna.libc-utils :refer [select]]))
 
-(jna-ns libc c [Integer inotify_init,
+(to-ns libc c  [Integer inotify_init,
                 Integer inotify_add_watch,
                 Integer inotify_rm_watch,
                 Integer pipe,

@@ -1,6 +1,8 @@
 (defproject net.n01se/clojure-jna "1.0.0-SNAPSHOT"
   :description "Access native libraries from Clojure"
   :url "http://github.com/Chouser/clojure-jna/"
+  :scm {:name "git"
+        :url "https://github.com/Chouser/clojure-jna/"}
   :dependencies [[net.java.dev.jna/jna "4.0.0"]]
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
