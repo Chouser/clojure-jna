@@ -4,7 +4,7 @@ clojure-jna is available from clojars. Just add this to your Leiningen
 `project.clj` in the `:dependencies` section:
 
 ```clojure
-[n01se.net/clojure-jna "1.0.0"]
+[net.n01se/clojure-jna "1.0.0"]
 ```
 ===
 Usage
