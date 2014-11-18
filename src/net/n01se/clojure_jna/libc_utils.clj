@@ -9,7 +9,7 @@
 (ns net.n01se.clojure-jna.libc-utils
  "Convenience wrappers for libc functions. Currently just 'select'"
   {:author "Chris Houser"}
-  (:require [net.n01se.clojure-jna :as jna :refer [make-cbuf pointer]]))
+  (:require [net.n01se.clojure-jna :as jna :refer [make-cbuf pointer when-err]]))
 
 (jna/to-ns libc c [Integer select])
 
@@ -55,7 +55,7 @@
                     (-> (make-cbuf 16)
                         (.putLong (long timeout-secs))
                         (.putLong (long (* (rem timeout-secs 1) 1000000))))))]
-    (jna/when-err (libc/select
+    (when-err (libc/select
                 (inc (apply max (concat readfds writefds exceptfds)))
                 (pointer readfds-buf)
                 (pointer writefds-buf)
