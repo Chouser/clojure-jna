@@ -55,7 +55,7 @@
                     (-> (make-cbuf 16)
                         (.putLong (long timeout-secs))
                         (.putLong (long (* (rem timeout-secs 1) 1000000))))))]
-    (when-err (libc/select
+    (jna/when-err (libc/select
                 (inc (apply max (concat readfds writefds exceptfds)))
                 (pointer readfds-buf)
                 (pointer writefds-buf)
