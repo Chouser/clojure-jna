@@ -9,6 +9,8 @@
             :distribution :repo
             :comments "same as Clojure"}
   :min-lein-version "2.0.0"
+  :jvm-opts ["-Djna.nosys=true"]
+  :java-source-paths ["src/java"]
   :profiles {:1.2 {:dependencies [[org.clojure/clojure "1.2.0"]]}
              :1.3 {:dependencies [[org.clojure/clojure "1.3.0"]]}
              :1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
